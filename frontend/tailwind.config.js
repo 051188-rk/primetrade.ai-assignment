@@ -1,0 +1,14 @@
+module.exports = {
+  content: ['./src/**/*.{js,jsx,ts,tsx}','./public/index.html'],
+  theme: {
+    extend: {
+      colors: {
+        neon: '#00ff88',
+      },
+      fontFamily: {
+        poppins: ['Poppins', 'sans-serif'],
+      }
+    },
+  },
+  plugins: [],
+};
