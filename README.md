@@ -50,7 +50,7 @@ A full-stack task management application with user authentication, role-based ac
 
 ## Database
 <div align="center">
-  <img src="https://raw.githubusercontent.com/051188-rk/primetrade.ai-assignment/main/frontend/public/schema.png" alt="schema diagram" width="200"/>
+  <img src="https://raw.githubusercontent.com/051188-rk/primetrade.ai-assignment/main/frontend/public/schema.png" alt="schema diagram" width="1000"/>
 </div>
 
 ## 📦 Installation
