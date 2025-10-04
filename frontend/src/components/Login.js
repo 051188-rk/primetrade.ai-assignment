@@ -23,17 +23,13 @@ const Login = () => {
       
       // If login is successful, store the token and user data
       if (response.data && response.data.token) {
-        const userData = await login(response.data.token);
+        // Pass both token and user data to login
+        const { token, user } = response.data;
+        await login(token, user);
         
-        // Check if user data is available before accessing role
-        if (userData && userData.user) {
-          // Redirect based on user role or to a default route
-          const redirectPath = userData.user.role === 'admin' ? '/admin/dashboard' : '/dashboard';
-          navigate(redirectPath);
-        } else {
-          // If user data is missing, still redirect to dashboard
-          navigate('/dashboard');
-        }
+        // Redirect based on user role or to a default route
+        const redirectPath = user?.role === 'admin' ? '/admin/dashboard' : '/';
+        navigate(redirectPath);
       } else {
         throw new Error('Invalid response from server');
       }

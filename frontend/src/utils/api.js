@@ -53,14 +53,15 @@ export const authAPI = {
 
 // Users API
 export const userAPI = {
-  getUsers: (params = {}) => api.get('/users', { params }),
-  getUserById: (id) => api.get(`/users/${id}`),
-  createUser: (userData) => api.post('/users', userData),
-  updateUser: (id, userData) => api.put(`/users/${id}`, userData),
-  deleteUser: (id) => api.delete(`/users/${id}`),
-  updateProfile: (userData) => api.put('/users/profile', userData),
-  changePassword: (data) => api.put('/users/change-password', data),
-  getUsersForAssignment: () => api.get('/users/assignable'),
+  getUsers: (params = {}) => api.get('/user', { params }),
+  getUserById: (id) => api.get(`/user/${id}`),
+  getCurrentUser: () => api.get('/user/me'),
+  createUser: (userData) => api.post('/user', userData),
+  updateUser: (id, userData) => api.put(`/user/${id}`, userData),
+  deleteUser: (id) => api.delete(`/user/${id}`),
+  updateProfile: (userData) => api.put('/user/profile', userData),
+  changePassword: (data) => api.put('/user/password', data),
+  getUsersForAssignment: () => api.get('/user/assignable'),
 };
 
 // Tasks API
