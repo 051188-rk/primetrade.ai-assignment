@@ -16,7 +16,7 @@ connectDB();
 
 // CORS configuration
 const corsOptions = {
-  origin: ['http://localhost:3000', 'https://your-vercel-app.vercel.app'],
+  origin: ['http://localhost:3000', 'https://primetrade-ai-assignment-five.vercel.app'],
   credentials: true,
   optionsSuccessStatus: 200
 };
