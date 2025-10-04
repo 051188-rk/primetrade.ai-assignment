@@ -190,11 +190,7 @@ For complete API documentation, please refer to the [Postman Documentation](http
 
 Distributed under the MIT License. See `LICENSE` for more information.
 
-## 📬 Contact
 
-Your Name - [@your_twitter](https://twitter.com/your_twitter) - your.email@example.com
-
-Project Link: [https://github.com/051188-rk/primetrade.ai-assignment](https://github.com/051188-rk/primetrade.ai-assignment)
 
 ## 🙏 Acknowledgments
 
