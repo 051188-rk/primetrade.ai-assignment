@@ -15,14 +15,36 @@ const app = express();
 connectDB();
 
 // CORS configuration
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://primetrade-ai-assignment-five.vercel.app',
+  'https://primetrade-ai-assignment.vercel.app'
+];
+
 const corsOptions = {
-  origin: ['http://localhost:3000', 'https://primetrade-ai-assignment-five.vercel.app'],
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
   credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
   optionsSuccessStatus: 200
 };
 
 // Middleware
 app.use(express.json());
+
+// Enable CORS pre-flight for all routes
+app.options('*', cors(corsOptions));
+
+// Apply CORS to all routes
 app.use(cors(corsOptions));
 
 // Swagger Configuration
