@@ -1,13 +1,32 @@
 import express from 'express';
+import bcrypt from 'bcryptjs';
 import { auth } from '../middleware/auth.js';
 import User from '../models/User.js';
 import { body, validationResult } from 'express-validator';
 
 const router = express.Router();
 
-// @route   GET /api/user/me
-// @desc    Get current user's profile
-// @access  Private
+/**
+ * @swagger
+ * tags:
+ *   - name: User
+ *     description: User profile management
+ */
+
+/**
+ * @swagger
+ * /api/user/me:
+ *   get:
+ *     summary: Get current user's profile
+ *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: The current user's profile information.
+ *       401:
+ *         description: Unauthorized
+ */
 router.get('/me', auth, async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-password');
@@ -21,9 +40,27 @@ router.get('/me', auth, async (req, res) => {
   }
 });
 
-// @route   GET /api/user/:id
-// @desc    Get user by ID
-// @access  Private
+/**
+ * @swagger
+ * /api/user/{id}:
+ *   get:
+ *     summary: Get a user's profile by ID
+ *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The user ID
+ *     responses:
+ *       200:
+ *         description: The user's profile information.
+ *       404:
+ *         description: User not found
+ */
 router.get('/:id', auth, async (req, res) => {
   try {
     const user = await User.findById(req.params.id).select('-password');
@@ -40,9 +77,38 @@ router.get('/:id', auth, async (req, res) => {
   }
 });
 
-// @route   PUT /api/user/profile
-// @desc    Update user profile
-// @access  Private
+/**
+ * @swagger
+ * /api/user/profile:
+ *   put:
+ *     summary: Update the current user's profile
+ *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               phone:
+ *                 type: string
+ *               position:
+ *                 type: string
+ *               department:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Profile updated successfully.
+ *       400:
+ *         description: Bad request (e.g., validation error)
+ */
 router.put(
   '/profile',
   [
@@ -59,31 +125,10 @@ router.put(
     }
 
     const { name, email, phone, position, department } = req.body;
-
-    // Build profile object
-    const profileFields = {};
-    if (name) profileFields.name = name;
-    if (email) profileFields.email = email;
-    if (phone) profileFields.phone = phone;
-    if (position) profileFields.position = position;
-    if (department) profileFields.department = department;
+    const profileFields = { name, email, phone, position, department };
 
     try {
-      let user = await User.findById(req.user.id);
-
-      if (!user) {
-        return res.status(404).json({ msg: 'User not found' });
-      }
-
-      // Check if email is already taken by another user
-      if (email && email !== user.email) {
-        const existingUser = await User.findOne({ email });
-        if (existingUser) {
-          return res.status(400).json({ errors: [{ msg: 'Email already in use' }] });
-        }
-      }
-
-      user = await User.findByIdAndUpdate(
+      const user = await User.findByIdAndUpdate(
         req.user.id,
         { $set: profileFields },
         { new: true }
@@ -97,9 +142,38 @@ router.put(
   }
 );
 
-// @route   PUT /api/user/password
-// @desc    Change user password
-// @access  Private
+/**
+ * @swagger
+ * /api/user/password:
+ *   put:
+ *     summary: Change the current user's password
+ *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - currentPassword
+ *               - newPassword
+ *             properties:
+ *               currentPassword:
+ *                 type: string
+ *                 format: password
+ *                 description: The user's current password
+ *               newPassword:
+ *                 type: string
+ *                 format: password
+ *                 description: The new password (minimum 6 characters)
+ *     responses:
+ *       200:
+ *         description: Password updated successfully.
+ *       400:
+ *         description: Incorrect current password or invalid new password
+ */
 router.put(
   '/password',
   [
@@ -120,13 +194,11 @@ router.put(
     try {
       const user = await User.findById(req.user.id);
       
-      // Verify current password
       const isMatch = await bcrypt.compare(currentPassword, user.password);
       if (!isMatch) {
         return res.status(400).json({ errors: [{ msg: 'Current password is incorrect' }] });
       }
 
-      // Hash new password
       const salt = await bcrypt.genSalt(10);
       user.password = await bcrypt.hash(newPassword, salt);
       
