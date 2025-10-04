@@ -27,9 +27,8 @@ const Login = () => {
         const { token, user } = response.data;
         await login(token, user);
         
-        // Redirect based on user role or to a default route
-        const redirectPath = user?.role === 'admin' ? '/admin/dashboard' : '/';
-        navigate(redirectPath);
+        // Redirect all users to the main dashboard
+        navigate('/dashboard');
       } else {
         throw new Error('Invalid response from server');
       }

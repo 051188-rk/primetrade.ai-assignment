@@ -345,14 +345,6 @@ const TaskList = ({ isAdminView = false }) => {
                       scope="col" 
                       className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider"
                     >
-                      Created By
-                    </th>
-                  )}
-                  {isAdminView && (
-                    <th 
-                      scope="col" 
-                      className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider"
-                    >
                       Assigned To
                     </th>
                   )}
@@ -438,23 +430,6 @@ const TaskList = ({ isAdminView = false }) => {
                       <td className="px-6 py-4 whitespace-nowrap">
                         {getPriorityBadge(task.priority)}
                       </td>
-                      {isAdminView && (
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex items-center">
-                            <div className="flex-shrink-0 h-8 w-8 rounded-full bg-gray-700 flex items-center justify-center">
-                              <FaUser className="text-gray-400" />
-                            </div>
-                            <div className="ml-2">
-                              <div className="text-sm text-gray-200">
-                                {task.createdBy?.name || 'System'}
-                              </div>
-                              <div className="text-xs text-gray-400">
-                                {new Date(task.createdAt).toLocaleDateString()}
-                              </div>
-                            </div>
-                          </div>
-                        </td>
-                      )}
                       {isAdminView && (
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
